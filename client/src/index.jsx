@@ -19,6 +19,8 @@ class App extends React.Component {
     this.filterByStars = this.filterByStars.bind(this);
     this.clearFilter = this.clearFilter.bind(this);
     this.sortByTop = this.sortByTop.bind(this);
+    this.sortByDate = this.sortByDate.bind(this);
+    this.handleSortChange = this.handleSortChange.bind(this);
   }
 
   getAllComments() {
@@ -29,10 +31,21 @@ class App extends React.Component {
         comments.sort((a, b) => {
           return b.helpfulCount - a.helpfulCount;
         });
+        comments.forEach((comment) => {
+          comment.date = new Date(comment.date);
+        })
         var average = data.data[0].average
         var individualRatings = data.data[0].individualRatings;
         this.setState({ comments: comments, totalRating: average, individualRatings: individualRatings })
       })
+  }
+
+  sortByDate() {
+    const comments = this.state.comments;
+    const sortedComments = comments.slice().sort((a, b) => {
+      return b.date - a.date;
+    })
+    this.setState({ comments: sortedComments })
   }
 
   writeReview() {
@@ -46,11 +59,11 @@ class App extends React.Component {
     commentsCopy.sort((a, b) => {
       return b.helpfulCount - a.helpfulCount;
     })
-    this.setState({comments: commentsCopy})
+    this.setState({ comments: commentsCopy })
   }
 
   clearFilter() {
-    this.setState({filteredComments: []})
+    this.setState({ filteredComments: [] })
   }
 
   filterByStars(val) {
@@ -58,7 +71,7 @@ class App extends React.Component {
     const filteredComments = comments.filter((comment) => {
       return comment.rating === val;
     })
-    this.setState({filteredComments: filteredComments})
+    this.setState({ filteredComments: filteredComments })
   }
 
 
@@ -66,13 +79,31 @@ class App extends React.Component {
   helpfulClicked(event) {
     var id = event.target.id;
     var comments = this.state.comments;
-    var itemName = comments[id].itemName;
-    comments[id].buttonClicked = true;
+    var itemName;
+    var index;
+
+    //bugged for db update
+    comments.forEach((comment, idx) => {
+      if (comment.id == id) {
+        index = idx;
+        itemName = comment.itemName;
+        comment.buttonClicked = true;
+      }
+    })
+    console.log(index);
     Axios.patch('/comments', {
-      id: id,
+      id: index,
       itemName: itemName
     })
     this.setState({ comments: comments })
+  }
+
+  handleSortChange(event) {
+    if (event.target.value === 'mostRecent') {
+      this.sortByDate();
+    } else {
+      this.sortByTop();
+    }
   }
 
 
@@ -86,15 +117,16 @@ class App extends React.Component {
     if (this.state.filteredComments.length) {
       return (
         <div id="tsSubReviewContainer">
-        <Sidebar filterByStars={this.filterByStars} totalRating={this.state.totalRating} individualRatings={this.state.individualRatings} totalComments={this.state.comments.length}/>
-        <CommentContainer comments={this.state.filteredComments} helpfulClicked={this.helpfulClicked} clearFilter={this.clearFilter}/>
-      </div>
+          <button>Click me to open the modal</button>
+          <Sidebar filterByStars={this.filterByStars} totalRating={this.state.totalRating} individualRatings={this.state.individualRatings} totalComments={this.state.comments.length} />
+          <CommentContainer comments={this.state.filteredComments} helpfulClicked={this.helpfulClicked} clearFilter={this.clearFilter} />
+        </div>
       )
     } else {
       return (
         <div id="tsSubReviewContainer">
-          <Sidebar filterByStars={this.filterByStars} totalRating={this.state.totalRating} individualRatings={this.state.individualRatings} totalComments={this.state.comments.length}/>
-          <CommentContainer comments={this.state.comments} helpfulClicked={this.helpfulClicked}/>
+          <Sidebar filterByStars={this.filterByStars} totalRating={this.state.totalRating} individualRatings={this.state.individualRatings} totalComments={this.state.comments.length} />
+          <CommentContainer handleSortChange={this.handleSortChange} comments={this.state.comments} helpfulClicked={this.helpfulClicked} sortByDate={this.sortByDate} />
         </div>
       )
     }

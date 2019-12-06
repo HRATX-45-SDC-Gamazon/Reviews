@@ -144,16 +144,23 @@ for (let i = 0; i < items.length; i++) {
       fiveStarRatings++;
     }
 
-    idx = Math.floor(Math.random() * listOfDates.length)
-    let date = listOfDates[idx];
+    // idx = Math.floor(Math.random() * listOfDates.length)
+    // let date = listOfDates[idx];
     comment.id = x;
     comment.person = person;
     comment.title = title;
     comment.body = body;
     comment.rating = rating;
     comment.itemName = itemName;
-    comment.helpfulCount = 0;
-    comment.date = date;
+    comment.helpfulCount = Math.floor((Math.random() * 10));
+    comment.date = new Date(+(new Date()) - Math.floor(Math.random()*10000000000));
+
+    if ((Math.random() * 100) < 80) {
+      comment.verified = true;
+    } else {
+      comment.verified = false;
+    }
+
     total += rating;
     if (x === 29) {
       average = total / 30;
@@ -166,6 +173,7 @@ for (let i = 0; i < items.length; i++) {
       items[i].individualRatings = individualRatings;
     }
     items[i].comments.push(comment);
+    items[i].comments.sort((a, b) => {return b.helpfulCount - a.helpfulCount})
   }
 }
 
