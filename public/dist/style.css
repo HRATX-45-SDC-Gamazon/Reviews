@@ -51,6 +51,23 @@ body {
   color: #555
 }
 
+/* .tsTopBar {
+  font-weight: 900;
+  font-size: small;
+  display: flex;
+  justify-content: space-between;
+  background: rgb(213, 213, 213);
+  background: linear-gradient(
+    0deg,
+    rgba(213, 213, 213) 0%,
+    rgba(255, 255, 255) 79%
+  );
+  width: 550px;
+  height: 20px;
+  border-bottom: 1px solid gray;
+  position: absolute;
+} */
+
 .tsCommentButton:hover {
   cursor: pointer;
 }
@@ -83,6 +100,99 @@ body {
   color: #007600;
   font-size: 12px;
 }
+
+.tsPictureModalCommentAuthor {
+  color: #555;
+  font-size: 12px;
+}
+
+.tsModalPictureCommentBackdrop {
+  background-color: black;
+  width: 250px;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  margin-right: 15px;
+}
+
+.tsPictureModalCommentBottom > div {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.tsPictureModalCommentBottom > span {
+  color: #555;
+  font-size: 17px;
+}
+
+.tsModalPictureComment {
+  height: 80%;
+  width: 250px;
+}
+
+.tsPictureModalCommentBody {
+  margin-top: 10px;
+  margin-bottom: 15px;
+  font-size: 13px;
+  font-family: Arial;
+}
+
+.tsModalCommentContainer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  overflow: auto;
+}
+
+.tsPictureModalCommentSmallImage {
+  width: 48px;
+  height: 48px;
+  margin-right: 5px;
+}
+
+.tsPictureModalCommentSmallImage:hover {
+  cursor: pointer;
+}
+
+.tsPictureModalCommentTitle {
+  font-family: Arial;
+  text-overflow: ellipsis;
+  font-size: 1.1em;
+  font-weight: normal;
+}
+
+.tsPictureModalImageEmbedded > img {
+  margin-right: 3px;
+  height: 115px;
+  width: 115px;
+}
+
+.tsPictureModalImageEmbedded > img:hover {
+  cursor: pointer;
+}
+
+.tsPictureModalGalleryBar > img {
+  height: 15px;
+  width: 15px;
+  margin-right: 15px;
+}
+
+.tsPictureModalGalleryBar > span {
+  font-size: 13px;
+  font-weight: 400;
+  font-weight: bold;
+}
+
+.tsPictureModalGalleryBar:hover > img {
+  cursor: pointer;
+}
+
+.tsPictureModalGalleryBar:hover > span {
+  cursor: pointer;
+}
+
 
 .tsReportAbuseButton {
   border: none;
@@ -152,6 +262,22 @@ body {
   font-size: 13px;
 }
 
+.tsPictureMainModal {
+  height: 130px;
+  width: 130px;
+  margin-right: 15px;
+  margin-top: 15px;
+}
+
+.tsPictureMainModalPicture {
+  height: 128px;
+  width: 128px;
+}
+
+.tsPictureMainModalPicture:hover {
+  cursor: pointer;
+}
+
 .tsReviewDate {
   color: #555;
   font-size: 13px;
@@ -167,6 +293,14 @@ body {
   font-size: 85%;
   margin-left: 10px;
   margin-top: 2px;
+}
+
+.tsPictureModalContainer {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: auto;
 }
 
 .tsSeperator {
@@ -224,4 +358,15 @@ body {
   font-weight: 700;
   font-size: 17px;
   margin-bottom: 10px;
+}
+
+#tsPictureModalAnchor {
+  color: #0066c0;
+  font-size: 13px;
+}
+
+#tsPictureModalAnchor:hover {
+  cursor: pointer;
+  color: #c45500;
+  text-decoration: underline;
 }
