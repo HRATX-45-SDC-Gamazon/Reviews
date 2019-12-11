@@ -13,6 +13,7 @@ class App extends React.Component {
       totalRating: 0,
       title: '',
       commentNumberToDisplay: 10,
+      categoryRatings: undefined,
       individualRatings: [],
       filteredComments: [],
       totalPictures: []
@@ -33,6 +34,7 @@ class App extends React.Component {
       .then((data) => {
         var comments = data.data[0].comments;
         var title = data.data[0].name;
+        var categoryRatings = data.data[0].categoryRatings
         //have to sort here again instead of calling sortByTop, as both functions want to setState... Could be refactored...
         comments.sort((a, b) => {
           return b.helpfulCount - a.helpfulCount;
@@ -43,7 +45,14 @@ class App extends React.Component {
         var totalPictures = data.data[0].totalPictures
         var average = data.data[0].average
         var individualRatings = data.data[0].individualRatings;
-        this.setState({ comments: comments, totalRating: average, title: title, individualRatings: individualRatings, totalPictures: totalPictures })
+        this.setState({ 
+          comments: comments, 
+          totalRating: average, 
+          title: title, 
+          categoryRatings: categoryRatings,
+          individualRatings: individualRatings, 
+          totalPictures: totalPictures 
+        })
       })
   }
 
@@ -123,27 +132,45 @@ class App extends React.Component {
 
 
   render() {
-    if (this.state.filteredComments.length) {
-      return (
-        <div id="tsSubReviewContainer">
-          <Sidebar filterByStars={this.filterByStars} totalRating={this.state.totalRating} individualRatings={this.state.individualRatings} totalComments={this.state.comments.length} />
-          <div>
-            <PictureModal title={this.state.title} totalPictures={this.state.totalPictures} comments={this.state.comments}></PictureModal>
-            <CommentContainer showAllReviews={this.showAllReviews} comments={this.state.filteredComments} commentNumberToDisplay={this.state.commentNumberToDisplay} helpfulClicked={this.helpfulClicked} clearFilter={this.clearFilter} />
-          </div>
-        </div>
-      )
-    } else {
-      return (
-        <div id="tsSubReviewContainer">
-          <Sidebar filterByStars={this.filterByStars} totalRating={this.state.totalRating} individualRatings={this.state.individualRatings} totalComments={this.state.comments.length} />
-          <div>
-            <PictureModal title={this.state.title} totalPictures={this.state.totalPictures} comments={this.state.comments}></PictureModal>
-            <CommentContainer showAllReviews={this.showAllReviews} handleSortChange={this.handleSortChange} comments={this.state.comments} commentNumberToDisplay={this.state.commentNumberToDisplay} helpfulClicked={this.helpfulClicked} sortByDate={this.sortByDate} />
-          </div>
-        </div>
-      )
-    }
+
+    return (
+
+      <div id="tsSubReviewContainer">
+        <Sidebar 
+          filterByStars={this.filterByStars} 
+          totalRating={this.state.totalRating} 
+          individualRatings={this.state.individualRatings} 
+          totalComments={this.state.comments.length}
+          categoryRatings={this.state.categoryRatings} 
+        />
+        <div>
+        <PictureModal 
+          title={this.state.title} 
+          totalPictures={this.state.totalPictures} 
+          comments={this.state.comments} 
+        />
+        {this.state.filteredComments.length ? (
+          <CommentContainer 
+            showAllReviews={this.showAllReviews} 
+            comments={this.state.filteredComments} 
+            commentNumberToDisplay={this.state.commentNumberToDisplay} 
+            helpfulClicked={this.helpfulClicked} 
+            clearFilter={this.clearFilter} 
+          />
+        ) : (
+          <CommentContainer 
+            showAllReviews={this.showAllReviews} 
+            handleSortChange={this.handleSortChange} 
+            comments={this.state.comments} 
+            commentNumberToDisplay={this.state.commentNumberToDisplay} 
+            helpfulClicked={this.helpfulClicked} 
+            sortByDate={this.sortByDate} 
+          />
+        )
+        }
+      </div>
+    </div>
+    )
   }
 }
 
