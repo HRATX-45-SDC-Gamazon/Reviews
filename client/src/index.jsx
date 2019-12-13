@@ -68,8 +68,7 @@ class App extends React.Component {
   }
 
   writeReview() {
-    //TODO
-    //Need to find a way to render this on the page, without redirects
+    alert('This would have redirected you to the Gammazon reviews page!')
   }
 
   sortByTop() {
@@ -142,43 +141,55 @@ class App extends React.Component {
 
     return (
 
-      <div id="tsSubReviewContainer">
-        <Sidebar 
-          filterByStars={this.filterByStars}
-          featureHelpfulClicked={this.state.featureHelpfulClicked}
-          sidebarHelpfulClicked={this.sidebarHelpfulClicked}
-          totalRating={this.state.totalRating} 
-          individualRatings={this.state.individualRatings} 
-          totalComments={this.state.comments.length}
-          categoryRatings={this.state.categoryRatings} 
-        />
-        <div>
-        <PictureModal 
-          title={this.state.title} 
-          totalPictures={this.state.totalPictures} 
-          comments={this.state.comments} 
-        />
-        {this.state.filteredComments.length ? (
-          <CommentContainer 
-            showAllReviews={this.showAllReviews} 
-            comments={this.state.filteredComments} 
-            commentNumberToDisplay={this.state.commentNumberToDisplay} 
-            helpfulClicked={this.helpfulClicked} 
-            clearFilter={this.clearFilter} 
+
+      <div>
+        <div className="tsBigSeperator"></div>
+        <div id="tsSubReviewContainer">
+          <Sidebar 
+            filterByStars={this.filterByStars}
+            featureHelpfulClicked={this.state.featureHelpfulClicked}
+            sidebarHelpfulClicked={this.sidebarHelpfulClicked}
+            totalRating={this.state.totalRating} 
+            individualRatings={this.state.individualRatings} 
+            totalComments={this.state.comments.length}
+            categoryRatings={this.state.categoryRatings} 
+            writeReview={this.writeReview}
           />
-        ) : (
-          <CommentContainer 
-            showAllReviews={this.showAllReviews} 
-            handleSortChange={this.handleSortChange} 
-            comments={this.state.comments} 
-            commentNumberToDisplay={this.state.commentNumberToDisplay} 
-            helpfulClicked={this.helpfulClicked} 
-            sortByDate={this.sortByDate} 
-          />
-        )
-        }
+          <div>
+          {this.state.totalPictures.length ? (
+            <PictureModal 
+              title={this.state.title} 
+              totalPictures={this.state.totalPictures} 
+              comments={this.state.comments} 
+            />
+          ) : (null)}
+          {this.state.filteredComments.length ? (
+            <CommentContainer 
+              showAllReviews={this.showAllReviews} 
+              comments={this.state.filteredComments} 
+              commentNumberToDisplay={this.state.commentNumberToDisplay} 
+              helpfulClicked={this.helpfulClicked} 
+              clearFilter={this.clearFilter} 
+              writeReview={this.writeReview}
+            />
+          ) : (
+            <CommentContainer 
+              showAllReviews={this.showAllReviews} 
+              handleSortChange={this.handleSortChange} 
+              comments={this.state.comments} 
+              commentNumberToDisplay={this.state.commentNumberToDisplay} 
+              helpfulClicked={this.helpfulClicked} 
+              sortByDate={this.sortByDate} 
+              writeReview={this.writeReview}
+            />
+          )
+          }
+        </div>
       </div>
+      <div className="tsBigSeperator"></div>
+
     </div>
+
     )
   }
 }
