@@ -38,10 +38,9 @@ class App extends React.Component {
   }
 
 
-  getAllComments() {
-    Axios.get('comments/8', {baseURL: "http://gammazonreviews.us-east-2.elasticbeanstalk.com/"})
+  getAllComments(id=1) {
+    Axios.get(`comments/${id}`, {baseURL: "http://gammazonreviews.us-east-2.elasticbeanstalk.com/"})
       .then((data) => {
-        console.log(data);
         var comments = data.data[0].comments;
         var title = data.data[0].name;
         var categoryRatings = data.data[0].categoryRatings
@@ -149,7 +148,14 @@ class App extends React.Component {
 
 
   componentDidMount() {
-    this.getAllComments();
+    let idText = window.location.search;
+    if (idText) {
+      let croppedId = idText.substring((idText.indexOf('=') + 1));
+      croppedId = Number(croppedId);
+      this.getAllComments(croppedId)
+    } else {
+      this.getAllComments();
+    }
   }
 
 
