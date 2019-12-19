@@ -8,7 +8,7 @@ import ProductInformation from './ProductInformation.jsx';
 
 class App extends React.Component {
   constructor() {
-    super()
+    super();
     this.state = {
       comments: [],
       totalRating: 0,
@@ -37,54 +37,52 @@ class App extends React.Component {
     this.sidebarHelpfulClicked = this.sidebarHelpfulClicked.bind(this);
   }
 
-
-  getAllComments(id=1) {
-    Axios.get(`comments/${id}`, {baseURL: "http://gammazonreviews.us-east-2.elasticbeanstalk.com/"})
-      .then((data) => {
-        var comments = data.data[0].comments;
-        var title = data.data[0].name;
-        var categoryRatings = data.data[0].categoryRatings
-        var category = data.data[0].category;
-        var disclaimer = data.data[0].disclaimerText;
-        var directions = data.data[0].directions;
-        var foodIngredients = data.data[0].foodIngredients;
-        var safetyWarning = data.data[0].safetyWarning;
-        //have to sort here again instead of calling sortByTop, as both functions want to setState... Could be refactored...
-        comments.sort((a, b) => {
-          return b.helpfulCount - a.helpfulCount;
-        });
-        comments.forEach((comment) => {
-          comment.date = new Date(comment.date);
-        })
-        var totalPictures = data.data[0].totalPictures
-        var average = data.data[0].average
-        var individualRatings = data.data[0].individualRatings;
-        this.setState({ 
-          disclaimer: disclaimer,
-          directions: directions,
-          foodIngredients: foodIngredients,
-          safetyWarning: safetyWarning,
-          comments: comments, 
-          category: category,
-          totalRating: average, 
-          title: title, 
-          categoryRatings: categoryRatings,
-          individualRatings: individualRatings, 
-          totalPictures: totalPictures 
-        })
-      })
+  getAllComments(id = 1) {
+    Axios.get(`comments/${id}`).then(data => {
+      var comments = data.data[0].comments;
+      var title = data.data[0].name;
+      var categoryRatings = data.data[0].categoryRatings;
+      var category = data.data[0].category;
+      var disclaimer = data.data[0].disclaimerText;
+      var directions = data.data[0].directions;
+      var foodIngredients = data.data[0].foodIngredients;
+      var safetyWarning = data.data[0].safetyWarning;
+      //have to sort here again instead of calling sortByTop, as both functions want to setState... Could be refactored...
+      comments.sort((a, b) => {
+        return b.helpfulCount - a.helpfulCount;
+      });
+      comments.forEach(comment => {
+        comment.date = new Date(comment.date);
+      });
+      var totalPictures = data.data[0].totalPictures;
+      var average = data.data[0].average;
+      var individualRatings = data.data[0].individualRatings;
+      this.setState({
+        disclaimer: disclaimer,
+        directions: directions,
+        foodIngredients: foodIngredients,
+        safetyWarning: safetyWarning,
+        comments: comments,
+        category: category,
+        totalRating: average,
+        title: title,
+        categoryRatings: categoryRatings,
+        individualRatings: individualRatings,
+        totalPictures: totalPictures
+      });
+    });
   }
 
   sortByDate() {
     const comments = this.state.comments;
     const sortedComments = comments.slice().sort((a, b) => {
       return b.date - a.date;
-    })
-    this.setState({ comments: sortedComments })
+    });
+    this.setState({ comments: sortedComments });
   }
 
   writeReview() {
-    alert('This would have redirected you to the Gammazon reviews page!')
+    alert('This would have redirected you to the Gammazon reviews page!');
   }
 
   sortByTop() {
@@ -92,30 +90,29 @@ class App extends React.Component {
     const commentsCopy = comments.slice();
     commentsCopy.sort((a, b) => {
       return b.helpfulCount - a.helpfulCount;
-    })
-    this.setState({ comments: commentsCopy })
+    });
+    this.setState({ comments: commentsCopy });
   }
 
   clearFilter() {
-    this.setState({ filteredComments: [] })
+    this.setState({ filteredComments: [] });
   }
 
   filterByStars(val) {
     const comments = this.state.comments;
-    const filteredComments = comments.filter((comment) => {
+    const filteredComments = comments.filter(comment => {
       return comment.rating === val;
-    })
-    this.setState({ filteredComments: filteredComments })
+    });
+    this.setState({ filteredComments: filteredComments });
   }
 
   showAllReviews() {
-    this.setState({commentNumberToDisplay: this.state.comments.length})
+    this.setState({ commentNumberToDisplay: this.state.comments.length });
   }
 
   sidebarHelpfulClicked() {
-    this.setState({featureHelpfulClicked: true});
+    this.setState({ featureHelpfulClicked: true });
   }
-
 
   helpfulClicked(event) {
     var id = event.target.id;
@@ -130,12 +127,16 @@ class App extends React.Component {
         itemName = comment.itemName;
         comment.buttonClicked = true;
       }
-    })
-    Axios.patch('comments', {
-      id: index,
-      itemName: itemName
-    }, {baseURL: "http://gammazonreviews.us-east-2.elasticbeanstalk.com/"})
-    this.setState({ comments: comments })
+    });
+    Axios.patch(
+      'comments',
+      {
+        id: index,
+        itemName: itemName
+      },
+      { baseURL: 'http://gammazonreviews.us-east-2.elasticbeanstalk.com/' }
+    );
+    this.setState({ comments: comments });
   }
 
   handleSortChange(event) {
@@ -146,28 +147,22 @@ class App extends React.Component {
     }
   }
 
-
   componentDidMount() {
     let idText = window.location.search;
     if (idText) {
-      let croppedId = idText.substring((idText.indexOf('=') + 1));
+      let croppedId = idText.substring(idText.indexOf('=') + 1);
       croppedId = Number(croppedId);
-      this.getAllComments(croppedId)
+      this.getAllComments(croppedId);
     } else {
       this.getAllComments();
     }
   }
 
-
-
   render() {
-
     return (
-
-
       <div>
         <div className="tsBigSeperator"></div>
-        <ProductInformation 
+        <ProductInformation
           category={this.state.category}
           disclaimer={this.state.disclaimer}
           directions={this.state.directions}
@@ -176,53 +171,46 @@ class App extends React.Component {
         />
         <div className="tsBigSeperator"></div>
         <div id="tsSubReviewContainer">
-          <Sidebar 
+          <Sidebar
             filterByStars={this.filterByStars}
             featureHelpfulClicked={this.state.featureHelpfulClicked}
             sidebarHelpfulClicked={this.sidebarHelpfulClicked}
-            totalRating={this.state.totalRating} 
-            individualRatings={this.state.individualRatings} 
+            totalRating={this.state.totalRating}
+            individualRatings={this.state.individualRatings}
             totalComments={this.state.comments.length}
-            categoryRatings={this.state.categoryRatings} 
+            categoryRatings={this.state.categoryRatings}
             writeReview={this.writeReview}
           />
           <div>
-          {this.state.totalPictures.length ? (
-            <PictureModal 
-              title={this.state.title} 
-              totalPictures={this.state.totalPictures} 
-              comments={this.state.comments} 
-            />
-          ) : (null)}
-          {this.state.filteredComments.length ? (
-            <CommentContainer 
-              showAllReviews={this.showAllReviews} 
-              comments={this.state.filteredComments} 
-              commentNumberToDisplay={this.state.commentNumberToDisplay} 
-              helpfulClicked={this.helpfulClicked} 
-              clearFilter={this.clearFilter} 
-              writeReview={this.writeReview}
-            />
-          ) : (
-            <CommentContainer 
-              showAllReviews={this.showAllReviews} 
-              handleSortChange={this.handleSortChange} 
-              comments={this.state.comments} 
-              commentNumberToDisplay={this.state.commentNumberToDisplay} 
-              helpfulClicked={this.helpfulClicked} 
-              sortByDate={this.sortByDate} 
-              writeReview={this.writeReview}
-            />
-          )
-          }
+            {this.state.totalPictures.length ? (
+              <PictureModal title={this.state.title} totalPictures={this.state.totalPictures} comments={this.state.comments} />
+            ) : null}
+            {this.state.filteredComments.length ? (
+              <CommentContainer
+                showAllReviews={this.showAllReviews}
+                comments={this.state.filteredComments}
+                commentNumberToDisplay={this.state.commentNumberToDisplay}
+                helpfulClicked={this.helpfulClicked}
+                clearFilter={this.clearFilter}
+                writeReview={this.writeReview}
+              />
+            ) : (
+              <CommentContainer
+                showAllReviews={this.showAllReviews}
+                handleSortChange={this.handleSortChange}
+                comments={this.state.comments}
+                commentNumberToDisplay={this.state.commentNumberToDisplay}
+                helpfulClicked={this.helpfulClicked}
+                sortByDate={this.sortByDate}
+                writeReview={this.writeReview}
+              />
+            )}
+          </div>
         </div>
+        <div className="tsBigSeperator"></div>
       </div>
-      <div className="tsBigSeperator"></div>
-
-    </div>
-
-    )
+    );
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('tsReviewContainer'))
+ReactDOM.render(<App />, document.getElementById('tsReviewContainer'));
