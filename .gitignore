@@ -2,5 +2,5 @@ node_modules
 server/structure.js
 products.csv
 products2.csv
-comments.csv
-comments2.csv
+reviews.csv
+reviewssql.csv
