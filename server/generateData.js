@@ -49,12 +49,9 @@ const lastNumAdded = () => {
 };
 
 const createCSV = num => {
-  let writeStream = fs.createWriteStream('comments2.csv', { flags: 'a' });
-  for (let i = num; i < num + 1e6; i++) {
-    let rand = Math.ceil(Math.random() * 5);
-    for (let j = 0; j < rand; j++) {
-      writeStream.write(commafy(commentsData(i)));
-    }
+  let writeStream = fs.createWriteStream('reviews.csv', { flags: 'a' });
+  for (let i = num; i < num + 5e6; i++) {
+    writeStream.write(commafy(commentsData(i)));
   }
   // fs.appendFile('fakedata.csv', commafy(productsData()), err => {
   //   if (err) {
@@ -63,6 +60,6 @@ const createCSV = num => {
   // });
 };
 
-// createCSV(1 + 9e6);
+createCSV(1 + 5e6);
 
 module.exports = { productsData, commentsData };
